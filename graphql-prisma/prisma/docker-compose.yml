@@ -1,10 +1,10 @@
-version: "3"
+version: '3'
 services:
   prisma:
-    image: prismagraphql/prisma:1.32
+    image: prismagraphql/prisma:1.33
     restart: always
     ports:
-      - "4466:4466"
+      - '4466:4466'
     environment:
       PRISMA_CONFIG: |
         port: 4466
@@ -31,7 +31,7 @@ services:
     depends_on:
       - postgres-db
     ports:
-      - "5050:80"
+      - '5050:80'
     environment:
       PGADMIN_DEFAULT_EMAIL: test@test.com
       PGADMIN_DEFAULT_PASSWORD: testpass

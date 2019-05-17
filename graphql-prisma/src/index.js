@@ -1,4 +1,4 @@
-import { GraphQLServer, PubSub } from 'graphql-yoga';
+import { GraphQLServer } from 'graphql-yoga';
 import { Prisma } from 'prisma-binding';
 
 import Query from './resolvers/Query';
@@ -8,19 +8,18 @@ import User from './resolvers/User';
 import Post from './resolvers/Post';
 import Comment from './resolvers/Comment';
 
-import db from './db';
-
-const pubsub = new PubSub();
-
 const prisma = new Prisma({
   typeDefs: './src/generated/prisma.graphql',
-  endpoint: 'http://localhost:4466'
+  endpoint: 'http://localhost:4466',
+  secret: 'itsasecrettoeverybody'
 });
 
 const server = new GraphQLServer({
   typeDefs: './src/schema.graphql',
   resolvers: { Query, Mutation, Subscription, User, Post, Comment },
-  context: { db, pubsub, prisma }
+  context({ request }) {
+    return { prisma, request };
+  }
 });
 
 server.start(() => {
