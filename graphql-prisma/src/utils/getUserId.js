@@ -1,12 +1,18 @@
 import jwt from 'jsonwebtoken';
 
-export default request => {
-  const header = request.headers.authorization;
+export default (request, throwOnMissingAuthHeader = true) => {
+  const header = request.request
+    ? request.request.headers.authorization
+    : request.connection.context.Authorization;
 
-  if (!header) throw new Error('No authorization header');
+  if (header) {
+    const token = header.replace('Bearer ', '');
+    const decoded = jwt.verify(token, 'thisisasecret');
 
-  const token = header.replace('Bearer ', '');
-  const decoded = jwt.verify(token, 'thisisasecret');
+    return decoded.userId;
+  }
 
-  return decoded.userId;
+  if (throwOnMissingAuthHeader) throw new Error('No authorization header');
+
+  return null;
 };
