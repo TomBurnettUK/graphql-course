@@ -1,3 +1,5 @@
+import '@babel/polyfill';
+
 import { GraphQLServer } from 'graphql-yoga';
 import { Prisma, extractFragmentReplacements } from 'prisma-binding';
 
@@ -13,7 +15,7 @@ const fragmentReplacements = extractFragmentReplacements(resolvers);
 
 const prisma = new Prisma({
   typeDefs: './src/generated/prisma.graphql',
-  endpoint: 'http://localhost:4466',
+  endpoint: process.env.PRISMA_ENDPOINT,
   secret: 'itsasecrettoeverybody',
   fragmentReplacements
 });
