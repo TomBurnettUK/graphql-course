@@ -1,8 +1,31 @@
+# import UserOrderByInput, PostOrderByInput, CommentOrderByInput from './generated/prisma.graphql'
+
 type Query {
   me: User!
-  users(query: String): [User!]!
-  posts(query: String): [Post!]!
-  comments: [Comment!]!
+
+  users(
+    query: String
+    first: Int
+    skip: Int
+    after: String
+    orderBy: UserOrderByInput
+  ): [User!]!
+
+  posts(
+    query: String
+    first: Int
+    skip: Int
+    after: String
+    orderBy: PostOrderByInput
+  ): [Post!]!
+
+  comments(
+    first: Int
+    skip: Int
+    after: String
+    orderBy: CommentOrderByInput
+  ): [Comment!]!
+
   post(id: ID!): Post!
 }
 
@@ -70,6 +93,8 @@ type User {
   email: String
   posts: [Post!]!
   comments: [Comment!]!
+  updatedAt: String!
+  createdAt: String!
 }
 
 type Post {
@@ -79,6 +104,8 @@ type Post {
   published: Boolean!
   author: User!
   comments: [Comment!]!
+  updatedAt: String!
+  createdAt: String!
 }
 
 type Comment {
@@ -86,6 +113,8 @@ type Comment {
   post: Post!
   author: User!
   text: String!
+  updatedAt: String!
+  createdAt: String!
 }
 
 type AuthPayload {
