@@ -8,12 +8,18 @@
       "@babel/preset-env"
     ]
   },
+  "jest": {
+    "globalSetup": "./tests/setup/globalSetup.js",
+    "globalTeardown": "./tests/setup/globalTeardown.js"
+  },
   "scripts": {
     "start": "node dist/index.js",
     "heroku-postbuild": "babel src --out-dir dist --copy-files",
     "watch": "env-cmd -f ./config/development.env nodemon src/index.js --ext js,graphql --exec babel-node",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "npx graphql-cli get-schema -p prisma"
+    "test": "env-cmd -f ./config/test.env jest",
+    "generate": "npx graphql-cli get-schema -p prisma --dotenv config/development.env",
+    "deploy-dev": "prisma deploy -e config/development.env",
+    "deploy-prod": "prisma deploy -e config/production.env"
   },
   "author": "",
   "license": "ISC",
@@ -30,6 +36,9 @@
   },
   "devDependencies": {
     "@babel/node": "^7.4.5",
-    "nodemon": "^1.19.0"
+    "@babel/register": "^7.4.4",
+    "@types/jest": "^24.0.13",
+    "jest": "^24.8.0",
+    "nodemon": "^1.19.1"
   }
 }
