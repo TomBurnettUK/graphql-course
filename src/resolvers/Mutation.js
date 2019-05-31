@@ -68,19 +68,38 @@ const Mutation = {
 
   async updatePost(_, { id, data }, { prisma, request }, info) {
     const userId = getUserId(request);
-    const post = await prisma.query.post({ where: { id } }, info);
 
-    if (!post) throw new Error('Post does not exist');
-    if (post.author.id !== userId)
-      throw new Error('User is not authorised to update post');
+    const postExists = await prisma.exists.Post({
+      id,
+      author: {
+        id: userId
+      }
+    });
 
-    if (data.published === false) {
+    const isPublished = await prisma.exists.Post({
+      id: id,
+      published: true
+    });
+
+    if (!postExists) {
+      throw new Error('Unable to update post');
+    }
+
+    if (isPublished && data.published === false) {
       await prisma.mutation.deleteManyComments({
         where: { post: { id } }
       });
     }
 
-    return prisma.mutation.updatePost({ where: { id }, data }, info);
+    return prisma.mutation.updatePost(
+      {
+        where: {
+          id
+        },
+        data
+      },
+      info
+    );
   },
 
   async createComment(_, { data }, { prisma, request }, info) {
