@@ -89,3 +89,16 @@ export const deletePost = gql`
     }
   }
 `;
+
+// ***************************************
+// Comment
+// ***************************************
+
+export const deleteComment = gql`
+  mutation($id: ID!) {
+    deleteComment(id: $id) {
+      id
+      text
+    }
+  }
+`;

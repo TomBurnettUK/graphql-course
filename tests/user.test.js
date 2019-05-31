@@ -15,7 +15,7 @@ test('create new user', async () => {
   const variables = {
     data: {
       name: 'Steve',
-      email: 'andrew@test.com',
+      email: 'steve@test.com',
       password: 'pass123'
     }
   };
@@ -44,7 +44,7 @@ test('reject login with bad credentials', async () => {
 
 test('reject signup with short password', async () => {
   const variables = {
-    data: { name: 'Steve', email: 'andrew@test.com', password: 'pass' }
+    data: { name: 'Steve', email: 'steve@test.com', password: 'pass' }
   };
 
   await expect(
